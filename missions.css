@@ -1,0 +1,133 @@
+/* ----- Filters Row (Search + Filters + Add Mission) ----- */
+.filters-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+    margin-bottom: 5%;
+    justify-content: center;
+}
+
+/* ----- Search Box ----- */
+.search-box {
+    display: flex;
+    align-items: center;
+    background: #0e1a24;
+    padding: 8px 12px;
+    border-radius: 8px;
+    width: 280px;
+    border: 1px solid black;
+    height: 38px;
+}
+
+.search-box input {
+    background: transparent;
+    border: none;
+    outline: none;
+    margin-left: 8px;
+    color: white;
+    font-size: 14px;
+    width: 100%;
+}
+
+/* Icône de recherche */
+.icon-search {
+    width: 18px;
+    height: 18px;
+    color: white;
+}
+
+/* ----- Filter Buttons ----- */
+.filter-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: #0e1a24;
+    color: white;
+    padding: 0 12px;
+    font-size: 13px;
+    border-radius: 8px;
+    border: 1px solid black;
+    cursor: pointer;
+    height: 38px;
+    min-width: 220px;
+}
+
+.filter-btn:hover {
+    background: #152430;
+}
+
+/* Icône flèche */
+.icon-chevron {
+    width: 18px;
+    height: 18px;
+    color: white;
+}
+
+/* ----- Add Mission Button ----- */
+.btn-add-mission {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 14px;
+    background-color: #0e1a24;
+    border: 1px solid black;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    height: 38px;
+    width: 140px;
+    transition: 0.2s ease;
+}
+
+.btn-add-mission:hover {
+    transform: scale(1.05);
+    background: #152430;
+}
+
+/* Icône + */
+.icon-plus {
+    width: 20px;
+    height: 20px;
+    color: white;
+}
+
+/* Favoris */
+.favorite-btn {
+    cursor: pointer;
+    display: flex;
+    padding-right: 3%;
+}
+
+.icon-favorite {
+    fill: transparent;
+    stroke: black;
+    stroke-width: 2;
+    transition: fill 0.2s ease;
+    width: 24px;
+    height: 24px;
+}
+
+.favorite-btn.active .icon-favorite {
+    fill: rgb(191, 26, 26);
+    stroke: rgb(191, 26, 26);
+}
+
+.filter-select {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+}
+
+.filter-select option {
+    color: black;
+    /* quand la liste s’ouvre */
+}
+
