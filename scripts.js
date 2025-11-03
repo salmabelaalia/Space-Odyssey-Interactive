@@ -3,49 +3,48 @@
 // Objectif : Manipuler le DOM, gÃ©rer des donnÃ©es JSON,
 // et ajouter des fonctionnalitÃ©s dynamiques avec JavaScript.
 // ===============================
-const searchInput = document.querySelector("#search-input")
-const searchResult = document.querySelector(".tech-grid")
+const searchInput = document.querySelector("#search-input");
+const searchResult = document.querySelector(".tech-grid");
 
 // --- DonnÃ©es principales ---
 let missions = [];
-let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
 // ===============================
 // 1. CHARGEMENT DES DONNÃ‰ES
 // ===============================
 async function loadMissions() {
   try {
-    const response = await fetch('missions.json');
+    const response = await fetch("missions.json");
     missions = await response.json();
-
-    missions = orderList(missions)
-    createMissionList(missions)
+    missions = orderList(missions);
+    createMissionList(missions);
     // TODO: Afficher les missions au chargement
     // Utilise la fonction displayMissions(missions)
-
   } catch (error) {
     console.error("Erreur lors du chargement des missions :", error);
   }
 }
 
-loadMissions()
-
 function orderList(data) {
-    return data.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+  return data.sort((a, b) =>
+    a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+  );
 }
 
 function createMissionList(missionsList) {
-  searchResult.innerHTML = ''; // vider le container avant d'ajouter
-  missionsList.forEach(mission => {
+  searchResult.innerHTML = ""; // vider le container avant d'ajouter
+  missionsList.forEach((mission) => {
     const listItem = document.createElement("div");
     listItem.innerHTML = `
       <div class="tech-card">
         <img alt="${mission.name}" class="tech-card-image" src="${mission.image}" />
         <div class="tech-card-content">
+          <span class="tech-card-category">Article ${mission.id}</span>
           <h2 class="tech-card-title">${mission.name}</h2>
-          <p class="tech-card-description">${mission.agency}</p>
-          <p class="tech-card-description">${mission.launchDate}</p>
-          <p class="tech-card-description">${mission.objective}</p>
+          <p class="tech-card-description"><strong>Agency : </strong>${mission.agency}</p>
+          <p class="tech-card-description"><strong>Launch Date : </strong>${mission.launchDate}</p>
+          <p class="tech-card-description"><strong>Objective : </strong>${mission.objective}</p>
         </div>
       </div>
     `;
@@ -53,14 +52,14 @@ function createMissionList(missionsList) {
   });
 }
 
-document.addEventListener('DOMContentLoaded', loadMissions);
+document.addEventListener("DOMContentLoaded", loadMissions);
 
 // ===============================
 // 2. AFFICHAGE DES MISSIONS
 // ===============================
 function displayMissions(list) {
-  const container = document.getElementById('missions-container');
-  container.innerHTML = '';
+  const container = document.getElementById("missions-container");
+  container.innerHTML = "";
 
   // TODO: Boucler sur la liste des missions et crÃ©er dynamiquement des cartes
   // Exemple :
@@ -71,9 +70,23 @@ function displayMissions(list) {
 // ===============================
 // 3. RECHERCHE ET FILTRAGE
 // ===============================
+searchInput.addEventListener("input", searchMissions);
+
 function searchMissions(keyword) {
   // TODO: Filtrer les missions selon le nom ou lâ€™objectif
   // Utilise la mÃ©thode .filter() sur le tableau missions
+  searchResult.innerHTML = "";
+
+  const searchedString = keyword.target.value.toLowerCase();
+  const filtereArr = missions.filter(
+    (e1) =>
+      e1.name.toLowerCase().includes(searchedString) ||
+      e1.launchDate.includes(searchedString) ||
+      e1.agency.toLowerCase().includes(searchedString) ||
+      e1.objective.toLowerCase().includes(searchedString) ||
+      e1.id.toString().includes(searchedString)
+  );
+  createMissionList(filtereArr);
 }
 
 function filterByAgency(agency) {
@@ -125,7 +138,7 @@ function validateForm(data) {
 // ===============================
 // 7. INITIALISATION ET Ã‰VÃ‰NEMENTS
 // ===============================
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   // 1. Charger les missions
   loadMissions();
 
@@ -134,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // - Filtrage (select)
   // - Favoris (clic sur bouton)
   // - CRUD (formulaires dâ€™ajout/Ã©dition/suppression)
-  
+
   // TODO: Ajouter les Ã©couteurs dâ€™Ã©vÃ©nements ici
   // Exemple :
   // document.getElementById('search').addEventListener('input', (e) => searchMissions(e.target.value))
