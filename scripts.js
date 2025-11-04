@@ -34,20 +34,89 @@ function orderList(data) {
 
 function createMissionList(missionsList) {
   searchResult.innerHTML = ""; // vider le container avant d'ajouter
+
   missionsList.forEach((mission) => {
+    const isFav = favorites.includes(mission.id);
+
     const listItem = document.createElement("div");
     listItem.innerHTML = `
       <div class="tech-card">
-        <img alt="${mission.name}" class="tech-card-image" src="${mission.image}" />
-        <div class="tech-card-content">
-          <span class="tech-card-category">Article ${mission.id}</span>
-          <h2 class="tech-card-title">${mission.name}</h2>
-          <p class="tech-card-description"><strong>Agency : </strong>${mission.agency}</p>
-          <p class="tech-card-description"><strong>Launch Date : </strong>${mission.launchDate}</p>
-          <p class="tech-card-description"><strong>Objective : </strong>${mission.objective}</p>
+
+        <div class="card-actions">
+
+          <i class="favorite-star ${isFav ? "fa-solid" : "fa-regular"} fa-star" 
+             data-id="${mission.id}"></i>
+
+          <div class="menu-wrapper">
+            <i class="fa-solid fa-ellipsis-vertical menu-btn"></i>
+            <div class="menu-dropdown">
+              <button class="edit-btn" data-id="${mission.id}">Modifier</button>
+              <button class="delete-btn" data-id="${
+                mission.id
+              }">Supprimer</button>
+            </div>
+          </div>
+
         </div>
+
+        <img alt="${mission.name}" class="tech-card-image" src="${
+      mission.image
+    }" />
+        <div class="tech-card-content">
+          <span class="te²ch-card-category">Article ${mission.id}</span>
+          <h2 class="tech-card-title">${mission.name}</h2>
+          <p class="tech-card-description"><strong>Agency : </strong>${
+            mission.agency
+          }</p>
+          <p class="tech-card-description"><strong>Launch Date : </strong>${
+            mission.launchDate
+          }</p>
+          <p class="tech-card-description"><strong>Objective : </strong>${
+            mission.objective
+          }</p>
+        </div>
+
       </div>
     `;
+
+    // AFFICHER lE MENU
+    const menuBtn = listItem.querySelector(".menu-btn");
+    const menuDropdown = listItem.querySelector(".menu-dropdown");
+
+    menuBtn.addEventListener("click", (event) => {
+      event.stopPropagation(); // pour ne pas fermer immédiatement
+      menuDropdown.style.display =
+        menuDropdown.style.display === "flex" ? "none" : "flex";
+    });
+
+    // Fermer le menu si on clique ailleurs sur la page
+    document.addEventListener("click", () => {
+      menuDropdown.style.display = "none";
+    });
+
+    // GESTION FAVORIS
+    const star = listItem.querySelector(".favorite-star");
+
+    star.addEventListener("click", () => {
+      const id = mission.id;
+
+      // Si déjà favori → enlever
+      if (favorites.includes(id)) {
+        favorites = favorites.filter((fav) => fav !== id);
+        star.classList.remove("fa-solid", "active");
+        star.classList.add("fa-regular");
+      }
+
+      // Sinon → ajouter
+      else {
+        favorites.push(id);
+        star.classList.add("fa-solid", "active");
+        star.classList.remove("fa-regular");
+      }
+
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+    });
+
     searchResult.appendChild(listItem);
   });
 }
@@ -89,6 +158,42 @@ function searchMissions(keyword) {
   createMissionList(filtereArr);
 }
 
+// === ACTIVER LES FILTRES ===
+document
+  .getElementById("filter-agency")
+  .addEventListener("change", applyFilters);
+document.getElementById("launchYear").addEventListener("change", applyFilters);
+document.getElementById("missionType").addEventListener("change", applyFilters);
+
+function applyFilters() {
+  const agencySelected = document.getElementById("filter-agency").value;
+  const yearSelected = document.getElementById("launchYear").value;
+  const typeSelected = document.getElementById("missionType").value;
+
+  let filtered = missions;
+
+  // Filtre par agence
+  if (agencySelected !== "all") {
+    filtered = filtered.filter((m) =>
+      m.agency.toLowerCase().includes(agencySelected.toLowerCase())
+    );
+  }
+
+  // Filtre par année
+  if (yearSelected !== "") {
+    filtered = filtered.filter((m) => m.launchDate.startsWith(yearSelected));
+  }
+
+  // Filtre par type de mission
+  if (typeSelected !== "") {
+    filtered = filtered.filter((m) =>
+      m.agency.toLowerCase().includes(typeSelected.toLowerCase())
+    );
+  }
+
+  createMissionList(filtered);
+}
+
 function filterByAgency(agency) {
   // TODO: Filtrer selon lâ€™agence sÃ©lectionnÃ©e dans un menu dÃ©roulant
   // Si "all" est sÃ©lectionnÃ©, afficher toutes les missions
@@ -101,6 +206,7 @@ function toggleFavorite(id) {
   // TODO: Ajouter ou retirer un favori selon sâ€™il est dÃ©jÃ  dans la liste
   // Mets Ã  jour le localStorage aprÃ¨s chaque modification
   // Affiche un message ou un style visuel (Ã©toile jaune, etc.)
+  
 }
 
 // ===============================

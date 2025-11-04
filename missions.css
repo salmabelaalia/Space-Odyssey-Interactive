@@ -96,27 +96,6 @@
     color: white;
 }
 
-/* Favoris */
-.favorite-btn {
-    cursor: pointer;
-    display: flex;
-    padding-right: 3%;
-}
-
-.icon-favorite {
-    fill: transparent;
-    stroke: black;
-    stroke-width: 2;
-    transition: fill 0.2s ease;
-    width: 24px;
-    height: 24px;
-}
-
-.favorite-btn.active .icon-favorite {
-    fill: rgb(191, 26, 26);
-    stroke: rgb(191, 26, 26);
-}
-
 .filter-select {
     background: transparent;
     border: none;
@@ -127,7 +106,84 @@
 }
 
 .filter-select option {
-    color: black;
-    /* quand la liste s’ouvre */
+    background-color: #0e1a24;
 }
 
+.tech-card-wrapper {
+  position: relative; 
+}
+
+/* Conteneur rectangle autour étoile + menu */
+.card-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0,0,0,0.2);
+  backdrop-filter: blur(4px);
+  border-radius: 8px;
+  padding: 6px 8px;
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+/* Étoile */
+.favorite-star {
+  font-size: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  color: white;
+}
+
+.favorite-star.active {
+  color: rgb(214, 221, 14);
+}
+
+/* Menu wrapper */
+.menu-wrapper {
+  position: relative;
+}
+
+/* Icone trois points */
+.menu-btn {
+  font-size: 18px;
+  cursor: pointer;
+  color: white;
+}
+
+/* Dropdown caché */
+.menu-dropdown {
+  position: absolute;
+  top: 25px;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  padding: 8px 0;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* Boutons du menu */
+.menu-dropdown button {
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  width: 120px;
+}
+
+.menu-dropdown button:hover {
+  background: #e6e6e6;
+}
+
+.favorites-nav-btn {
+  cursor: pointer;
+  margin-left: 15px;
+  transition: 0.3s;
+}
+
+.favorites-nav-btn:hover {
+  transform: scale(1.1);
+}

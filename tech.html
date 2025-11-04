@@ -6,6 +6,10 @@
     <title>Space Odyssey - Missions</title>
     <!-- Polices Google -->
     <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+    <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
@@ -36,11 +40,14 @@
         </div>
 
         <div class="right-section">
-          <div class="search-bar">
-            <span></span>
-            <input type="text" placeholder="Search" />
-          </div>
-          <span class="language">English ▼</span>
+          <nav class="top-nav">
+            <!-- tes autres éléments -->
+            <i
+              id="nav-favorites-btn"
+              class="fa-solid fa-star favorites-nav-btn"
+            ></i>
+          </nav>
+
           <div class="icons">
             <div class="icon">
               <svg
@@ -121,7 +128,7 @@
 
         <!-- Filters -->
         <div class="filter-btn">
-          Agency:
+          Agency :
 
           <!-- Dropdown Agence -->
           <select id="filter-agency" class="filter-select">
@@ -134,8 +141,8 @@
         </div>
 
         <div class="filter-btn">
-          Launch Year:
-          <select id="launchYear">
+          Launch Year :
+          <select id="launchYear" class="filter-select">
             <option value="">Launch Year</option>
             <option value="1969">1969</option>
             <option value="1977">1977</option>
@@ -148,8 +155,8 @@
         </div>
 
         <div class="filter-btn">
-          Mission Type:
-          <select id="missionType">
+          Mission Type :
+          <select id="missionType" class="filter-select">
             <option value="">Mission Type</option>
             <option value="NASA">NASA</option>
             <option value="ESA">ESA</option>
@@ -180,7 +187,7 @@
       </div>
 
       <!-- Grids -->
-       <div class="tech-grid"></div>
+      <div class="tech-grid"></div>
     </main>
 
     <!-- Footer -->
