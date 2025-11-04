@@ -3,12 +3,14 @@
 // Objectif : Manipuler le DOM, gÃ©rer des donnÃ©es JSON,
 // et ajouter des fonctionnalitÃ©s dynamiques avec JavaScript.
 // ===============================
+
 const searchInput = document.querySelector("#search-input");
 const searchResult = document.querySelector(".tech-grid");
 
 // --- DonnÃ©es principales ---
 let missions = [];
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+let currentTab = "all"; // "all" | "favorites" | "my missions"
 
 // ===============================
 // 1. CHARGEMENT DES DONNÃ‰ES
@@ -41,45 +43,64 @@ function createMissionList(missionsList) {
     const listItem = document.createElement("div");
     listItem.innerHTML = `
       <div class="tech-card">
-
         <div class="card-actions">
 
-          <i class="favorite-star ${isFav ? "fa-solid" : "fa-regular"} fa-star" 
+          <i class="favorite-star ${isFav ? "fa-solid active" : "fa-regular"} fa-star" 
              data-id="${mission.id}"></i>
-
+            
           <div class="menu-wrapper">
             <i class="fa-solid fa-ellipsis-vertical menu-btn"></i>
             <div class="menu-dropdown">
               <button class="edit-btn" data-id="${mission.id}">Modifier</button>
-              <button class="delete-btn" data-id="${
-                mission.id
-              }">Supprimer</button>
+              <button class="delete-btn" data-id="${mission.id}">Supprimer</button>
             </div>
           </div>
 
         </div>
 
-        <img alt="${mission.name}" class="tech-card-image" src="${
-      mission.image
-    }" />
+        <img alt="${mission.name}" class="tech-card-image" src="${mission.image}" />
         <div class="tech-card-content">
-          <span class="te²ch-card-category">Article ${mission.id}</span>
+          <span class="tech-card-category">Article ${mission.id}</span>
           <h2 class="tech-card-title">${mission.name}</h2>
-          <p class="tech-card-description"><strong>Agency : </strong>${
-            mission.agency
-          }</p>
-          <p class="tech-card-description"><strong>Launch Date : </strong>${
-            mission.launchDate
-          }</p>
-          <p class="tech-card-description"><strong>Objective : </strong>${
-            mission.objective
-          }</p>
+          <p class="tech-card-description"><strong>Agency : </strong>${mission.agency}</p>
+          <p class="tech-card-description"><strong>Launch Date : </strong>${mission.launchDate}</p>
+          <p class="tech-card-description"><strong>Objective : </strong>${mission.objective}</p>
         </div>
 
       </div>
     `;
 
-    // AFFICHER lE MENU
+    // ------------------------------
+    // GESTION DU FAVORI
+    // ------------------------------
+    const star = listItem.querySelector(".favorite-star");
+    star.addEventListener("click", () => {
+      const id = mission.id;
+
+      if (favorites.includes(id)) {
+        // retirer des favoris
+        favorites = favorites.filter((f) => f !== id);
+        star.classList.remove("fa-solid", "active");
+        star.classList.add("fa-regular");
+      } else {
+        // ajouter aux favoris
+        favorites.push(id);
+        star.classList.remove("fa-regular");
+        star.classList.add("fa-solid", "active");
+      }
+
+      // sauvegarder dans localStorage
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+
+      // si on est dans l'onglet favoris, rafraîchir l'affichage
+      if (currentTab === "favorites") {
+        showFavorites();
+      }
+    });
+
+    // ------------------------------
+    // MENU DROPDOWN
+    // ------------------------------
     const menuBtn = listItem.querySelector(".menu-btn");
     const menuDropdown = listItem.querySelector(".menu-dropdown");
 
@@ -89,36 +110,19 @@ function createMissionList(missionsList) {
         menuDropdown.style.display === "flex" ? "none" : "flex";
     });
 
-    // Fermer le menu si on clique ailleurs sur la page
+    //  Fermer le menu si on clique ailleurs sur la page
     document.addEventListener("click", () => {
       menuDropdown.style.display = "none";
     });
 
-    // GESTION FAVORIS
-    const star = listItem.querySelector(".favorite-star");
-
-    star.addEventListener("click", () => {
-      const id = mission.id;
-
-      // Si déjà favori → enlever
-      if (favorites.includes(id)) {
-        favorites = favorites.filter((fav) => fav !== id);
-        star.classList.remove("fa-solid", "active");
-        star.classList.add("fa-regular");
-      }
-
-      // Sinon → ajouter
-      else {
-        favorites.push(id);
-        star.classList.add("fa-solid", "active");
-        star.classList.remove("fa-regular");
-      }
-
-      localStorage.setItem("favorites", JSON.stringify(favorites));
+    // Empêcher que le clic sur le menu ferme lui-même
+    menuDropdown.addEventListener("click", (e) => {
+      e.stopPropagation();
     });
-
+    
     searchResult.appendChild(listItem);
   });
+
 }
 
 document.addEventListener("DOMContentLoaded", loadMissions);
@@ -141,27 +145,30 @@ function displayMissions(list) {
 // ===============================
 searchInput.addEventListener("input", searchMissions);
 
-function searchMissions(keyword) {
+function searchMissions(event) {
   // TODO: Filtrer les missions selon le nom ou lâ€™objectif
   // Utilise la mÃ©thode .filter() sur le tableau missions
-  searchResult.innerHTML = "";
+  const keyword = event.target.value.toLowerCase();
 
-  const searchedString = keyword.target.value.toLowerCase();
-  const filtereArr = missions.filter(
-    (e1) =>
-      e1.name.toLowerCase().includes(searchedString) ||
-      e1.launchDate.includes(searchedString) ||
-      e1.agency.toLowerCase().includes(searchedString) ||
-      e1.objective.toLowerCase().includes(searchedString) ||
-      e1.id.toString().includes(searchedString)
+  let filtered = missions.filter(
+    (m) =>
+      m.name.toLowerCase().includes(keyword) ||
+      m.launchDate.includes(keyword) ||
+      m.agency.toLowerCase().includes(keyword) ||
+      m.objective.toLowerCase().includes(keyword) ||
+      m.id.toString().includes(keyword)
   );
-  createMissionList(filtereArr);
+
+  // si onglet favoris actif
+  if (currentTab === "favorites") {
+    filtered = filtered.filter((m) => favorites.includes(m.id));
+  }
+
+  createMissionList(filtered);
 }
 
 // === ACTIVER LES FILTRES ===
-document
-  .getElementById("filter-agency")
-  .addEventListener("change", applyFilters);
+document.getElementById("filter-agency").addEventListener("change", applyFilters);
 document.getElementById("launchYear").addEventListener("change", applyFilters);
 document.getElementById("missionType").addEventListener("change", applyFilters);
 
@@ -191,8 +198,50 @@ function applyFilters() {
     );
   }
 
+  if (currentTab === "favorites") {
+    filtered = filtered.filter((m) => favorites.includes(m.id));
+  }
+
   createMissionList(filtered);
 }
+
+// ===============================
+// GESTION DES ONGLETS
+// ===============================
+const tabs = document.querySelectorAll(".tab");
+
+tabs.forEach((tab, index) => {
+  tab.addEventListener("click", () => {
+    tabs.forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+
+    if (index === 0) {
+      currentTab = "all";
+      createMissionList(missions);
+    } else if (index === 1) {
+      currentTab = "favorites";
+      showFavorites();
+    } else if (index === 2) {
+      currentTab = "mine";
+      // pour plus tard
+    }
+  });
+});
+
+// ===============================
+// . AFFICHER UNIQUEMENT LES FAVORIS
+// ===============================
+function showFavorites() {
+  const favMissions = missions.filter(m => favorites.includes(m.id));
+
+  if (favMissions.length === 0) {
+    searchResult.innerHTML = "<p style='color:white;'>Aucun favori</p>";
+    return;
+  }
+
+  createMissionList(favMissions);
+}
+
 
 function filterByAgency(agency) {
   // TODO: Filtrer selon lâ€™agence sÃ©lectionnÃ©e dans un menu dÃ©roulant
@@ -206,7 +255,6 @@ function toggleFavorite(id) {
   // TODO: Ajouter ou retirer un favori selon sâ€™il est dÃ©jÃ  dans la liste
   // Mets Ã  jour le localStorage aprÃ¨s chaque modification
   // Affiche un message ou un style visuel (Ã©toile jaune, etc.)
-  
 }
 
 // ===============================
