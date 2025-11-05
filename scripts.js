@@ -145,11 +145,6 @@ document.addEventListener("DOMContentLoaded", loadMissions);
 function displayMissions(list) {
   const container = document.getElementById("missions-container");
   container.innerHTML = "";
-
-  // TODO: Boucler sur la liste des missions et crÃ©er dynamiquement des cartes
-  // Exemple :
-  // list.forEach(mission => { ... })
-  // Utilise innerHTML pour afficher : image, nom, agence, objectif, date + bouton Favori
 }
 
 // ===============================
@@ -252,21 +247,6 @@ function showFavorites() {
   }
 
   createMissionList(favMissions);
-}
-
-
-function filterByAgency(agency) {
-  // TODO: Filtrer selon lâ€™agence sÃ©lectionnÃ©e dans un menu dÃ©roulant
-  // Si "all" est sÃ©lectionnÃ©, afficher toutes les missions
-}
-
-// ===============================
-// 4. FAVORIS (Bonus)
-// ===============================
-function toggleFavorite(id) {
-  // TODO: Ajouter ou retirer un favori selon sâ€™il est dÃ©jÃ  dans la liste
-  // Mets Ã  jour le localStorage aprÃ¨s chaque modification
-  // Affiche un message ou un style visuel (Ã©toile jaune, etc.)
 }
 
 // ===============================
@@ -385,129 +365,12 @@ function deleteMission(id) {
 }
 
 // ===============================
-// 6. VALIDATION DE FORMULAIRE
-// ===============================
-function validateForm(data) {
-  // TODO: VÃ©rifier que tous les champs obligatoires sont remplis
-  // BONUS : Utiliser Regex pour valider les emails et formats de dates
-  // Retourne true ou false
-    if (!confirm("Are you sure you want to delete this mission?")) return;
-
-    missions = missions.filter(m => m.id !== id);
-    favorites = favorites.filter(f => f !== id); // Retirer des favoris si nécessaire
-
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-
-    createMissionList(missions);
-}
-
-// ===============================
-// VALIDATION DU FORMULAIRE DE CONTACT
-// ===============================
-const contactForm = document.querySelector(".contact-form");
-
-// Fonction pour vérifier email avec regex
-function isValidEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
-}
-
-// Fonction pour créer un message d'erreur
-function showError(input, message) {
-  // Supprimer message précédent
-  let error = input.parentElement.querySelector(".error-message");
-  if (error) error.remove();
-
-  // Créer nouveau message
-  error = document.createElement("span");
-  error.className = "error-message";
-  error.style.color = "red";
-  error.style.fontSize = "0.9em";
-  error.textContent = message;
-
-  input.parentElement.appendChild(error);
-}
-
-// Supprimer message d'erreur
-function clearError(input) {
-  const error = input.parentElement.querySelector(".error-message");
-  if (error) error.remove();
-}
-
-// Écouteur de soumission
-contactForm.addEventListener("submit", function (e) {
-  e.preventDefault();
-
-  // Récupérer les valeurs
-  const firstName = document.getElementById("first-name");
-  const lastName = document.getElementById("last-name");
-  const email = document.getElementById("email");
-  const phone = document.getElementById("phone");
-  const message = document.getElementById("tex");
-
-  let isValid = true;
-
-  // Vérifier chaque champ
-  if (firstName.value.trim() === "") {
-    showError(firstName, "First name is required.");
-    isValid = false;
-  } else {
-    clearError(firstName);
-  }
-
-  if (lastName.value.trim() === "") {
-    showError(lastName, "Last name is required.");
-    isValid = false;
-  } else {
-    clearError(lastName);
-  }
-
-  if (email.value.trim() === "") {
-    showError(email, "Email is required.");
-    isValid = false;
-  } else if (!isValidEmail(email.value.trim())) {
-    showError(email, "Please enter a valid email address.");
-    isValid = false;
-  } else {
-    clearError(email);
-  }
-
-  if (phone.value.trim() === "") {
-    showError(phone, "Phone number is required.");
-    isValid = false;
-  } else {
-    clearError(phone);
-  }
-
-  if (message.value.trim() === "") {
-    showError(message, "Message cannot be empty.");
-    isValid = false;
-  } else {
-    clearError(message);
-  }
-
-  // Si tout est valide
-  if (isValid) {
-    alert("Message sent successfully!");
-    contactForm.reset();
-  }
-});
-
-
-// ===============================
 // 7. INITIALISATION ET Ã‰VÃ‰NEMENTS
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
   // 1. Charger les missions
   loadMissions();
-
-  // 2. Ã‰vÃ©nements :
-  // - Recherche (input)
-  // - Filtrage (select)
-  // - Favoris (clic sur bouton)
-  // - CRUD (formulaires dâ€™ajout/Ã©dition/suppression)
-
-  // TODO: Ajouter les Ã©couteurs dâ€™Ã©vÃ©nements ici
-  // Exemple :
-  // document.getElementById('search').addEventListener('input', (e) => searchMissions(e.target.value))
 });
+
+
+
