@@ -402,6 +402,99 @@ function validateForm(data) {
 }
 
 // ===============================
+// VALIDATION DU FORMULAIRE DE CONTACT
+// ===============================
+const contactForm = document.querySelector(".contact-form");
+
+// Fonction pour vérifier email avec regex
+function isValidEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
+
+// Fonction pour créer un message d'erreur
+function showError(input, message) {
+  // Supprimer message précédent
+  let error = input.parentElement.querySelector(".error-message");
+  if (error) error.remove();
+
+  // Créer nouveau message
+  error = document.createElement("span");
+  error.className = "error-message";
+  error.style.color = "red";
+  error.style.fontSize = "0.9em";
+  error.textContent = message;
+
+  input.parentElement.appendChild(error);
+}
+
+// Supprimer message d'erreur
+function clearError(input) {
+  const error = input.parentElement.querySelector(".error-message");
+  if (error) error.remove();
+}
+
+// Écouteur de soumission
+contactForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  // Récupérer les valeurs
+  const firstName = document.getElementById("first-name");
+  const lastName = document.getElementById("last-name");
+  const email = document.getElementById("email");
+  const phone = document.getElementById("phone");
+  const message = document.getElementById("tex");
+
+  let isValid = true;
+
+  // Vérifier chaque champ
+  if (firstName.value.trim() === "") {
+    showError(firstName, "First name is required.");
+    isValid = false;
+  } else {
+    clearError(firstName);
+  }
+
+  if (lastName.value.trim() === "") {
+    showError(lastName, "Last name is required.");
+    isValid = false;
+  } else {
+    clearError(lastName);
+  }
+
+  if (email.value.trim() === "") {
+    showError(email, "Email is required.");
+    isValid = false;
+  } else if (!isValidEmail(email.value.trim())) {
+    showError(email, "Please enter a valid email address.");
+    isValid = false;
+  } else {
+    clearError(email);
+  }
+
+  if (phone.value.trim() === "") {
+    showError(phone, "Phone number is required.");
+    isValid = false;
+  } else {
+    clearError(phone);
+  }
+
+  if (message.value.trim() === "") {
+    showError(message, "Message cannot be empty.");
+    isValid = false;
+  } else {
+    clearError(message);
+  }
+
+  // Si tout est valide
+  if (isValid) {
+    alert("Message sent successfully!");
+    contactForm.reset();
+  }
+});
+
+
+// ===============================
 // 7. INITIALISATION ET Ã‰VÃ‰NEMENTS
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
