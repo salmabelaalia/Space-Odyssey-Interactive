@@ -118,8 +118,20 @@ function createMissionList(missionsList) {
     // Empêcher que le clic sur le menu ferme lui-même
     menuDropdown.addEventListener("click", (e) => {
       e.stopPropagation();
+    });    
+
+    // Edit
+    const editBtn = listItem.querySelector(".edit-btn");
+    editBtn.addEventListener("click", () => openEditModal(mission.id));
+
+    // Delete
+    const deleteBtn = listItem.querySelector(".delete-btn");
+    deleteBtn.addEventListener("click", () => {
+      if (confirm("Do you really want to delete this mission ?")) {
+        deleteMission(mission.id);
+      }
     });
-    
+
     searchResult.appendChild(listItem);
   });
 
@@ -315,6 +327,7 @@ missionForm.addEventListener("submit", (e) => {
     closeMissionModal();
 });
 
+// --- Ã‰DITION ---
 function addMission(newMission) {
   // TODO: Ajouter une nouvelle mission Ã  la liste
   // VÃ©rifie les champs avec une validation de base avant lâ€™ajout
@@ -324,16 +337,51 @@ function addMission(newMission) {
   createMissionList(missions);
 }
 
-// --- Ã‰DITION ---
+// --- Modification ---
+const editBtn = listItem.querySelector(".edit-btn");
+editBtn.addEventListener("click", () => {
+    openEditModal(mission.id);
+});
+
+function openEditModal(id) {
+    const m = missions.find(m => m.id === id);
+    if (!m) return;
+
+    editingMissionId = id;
+
+    document.getElementById("modalTitle").textContent = "Edit Mission";
+
+    document.getElementById("missionName").value = m.name;
+    document.getElementById("missionAgency").value = m.agency;
+    document.getElementById("missionObjective").value = m.objective;
+    document.getElementById("missionDate").value = m.launchDate;
+    document.getElementById("missionImage").value = m.image;
+
+    missionModal.style.display = "flex";
+}
+
 function editMission(id, updatedData) {
   // TODO: Trouver la mission correspondante et modifier ses donnÃ©es
   // Mets Ã  jour lâ€™affichage
+    missions = missions.map(m => m.id === id ? updatedData  : m);
+    missions = orderList(missions);
+    createMissionList(missions);
 }
 
 // --- SUPPRESSION ---
+const deleteBtn = listItem.querySelector(".delete-btn");
+deleteBtn.addEventListener("click", () => {
+    if (confirm("Are you sure you want to delete this mission?")) {
+        deleteMission(mission.id);
+    }});
+
 function deleteMission(id) {
   // TODO: Supprimer une mission aprÃ¨s confirmation (window.confirm)
   // Mets Ã  jour lâ€™affichage
+    missions = missions.filter(m => m.id !== id);
+    favorites = favorites.filter(f => f !== id);
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+    createMissionList(missions);
 }
 
 // ===============================
@@ -343,6 +391,14 @@ function validateForm(data) {
   // TODO: VÃ©rifier que tous les champs obligatoires sont remplis
   // BONUS : Utiliser Regex pour valider les emails et formats de dates
   // Retourne true ou false
+    if (!confirm("Are you sure you want to delete this mission?")) return;
+
+    missions = missions.filter(m => m.id !== id);
+    favorites = favorites.filter(f => f !== id); // Retirer des favoris si nécessaire
+
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+
+    createMissionList(missions);
 }
 
 // ===============================
