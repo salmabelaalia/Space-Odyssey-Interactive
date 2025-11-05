@@ -262,10 +262,66 @@ function toggleFavorite(id) {
 // ===============================
 
 // --- AJOUT ---
+// FORMULAIRE AJOUT / EDITION
+// Variables pour ajout mission : Sélection des éléments du modal
+const addMissionBtn = document.querySelector(".btn-add-mission");
+const missionModal = document.getElementById("missionModal");
+const missionForm = document.getElementById("missionForm");
+const closeModalBtn = document.getElementById("closeModal");
+const cancelBtn = document.getElementById("cancelBtn");
+let editingMissionId = null; // null = ajout, sinon édition
+
+// Ouvrir le modal pour ajouter une nouvelle mission
+addMissionBtn.addEventListener("click", () => {
+    missionForm.reset(); // vider le formulaire
+    editingMissionId = null; // mode ajout
+    document.getElementById("modalTitle").textContent = "Ajouter une mission";
+    missionModal.style.display = "flex";
+});
+
+function closeMissionModal() {
+    missionModal.style.display = "none";
+}
+
+closeModalBtn.addEventListener("click", closeMissionModal);
+cancelBtn.addEventListener("click", closeMissionModal);
+
+// Fermer en cliquant à l’extérieur du modal
+window.addEventListener("click", (e) => {
+    if (e.target === missionModal) closeMissionModal();
+});
+
+// Soumission du formulaire : ajout ou modification
+missionForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const mission = {
+        id: editingMissionId || missions.length + 1,
+        name: document.getElementById("missionName").value,
+        agency: document.getElementById("missionAgency").value,
+        objective: document.getElementById("missionObjective").value,
+        launchDate: document.getElementById("missionDate").value,
+        image: document.getElementById("missionImage").value,
+    };
+
+    if (editingMissionId) {
+        editMission(editingMissionId, mission);
+    } else {
+        addMission(mission);
+    }
+
+    missionForm.reset();
+    editingMissionId = null;
+    closeMissionModal();
+});
+
 function addMission(newMission) {
   // TODO: Ajouter une nouvelle mission Ã  la liste
   // VÃ©rifie les champs avec une validation de base avant lâ€™ajout
   // Mets Ã  jour lâ€™affichage
+  missions.push(newMission);
+  missions = orderList(missions);
+  createMissionList(missions);
 }
 
 // --- Ã‰DITION ---

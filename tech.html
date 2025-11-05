@@ -40,13 +40,6 @@
         </div>
 
         <div class="right-section">
-          <nav class="top-nav">
-            <!-- tes autres éléments -->
-            <i
-              id="nav-favorites-btn"
-              class="fa-solid fa-star favorites-nav-btn"
-            ></i>
-          </nav>
 
           <div class="icons">
             <div class="icon">
@@ -194,6 +187,65 @@
 
       <div class="tech-grid"></div>
     </main>
+
+
+    <!-- Formulaire : ajout mission -->
+<div class="modal" id="missionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Add mission</h2>
+                <button class="close-modal" id="closeModal"></button>
+            </div>
+            <form id="missionForm">
+                <input type="hidden" id="missionId">
+                
+                <div class="form-group">
+                    <label class="form-label" for="missionName">Mission Name</label>
+                    <input type="text" class="form-input" id="missionName" required>
+                    <div class="error-message" id="nameError">Mission name is required</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="missionAgency">Space Agency</label>
+                    <select class="form-input" id="missionAgency" required>
+                        <option value="">Select an agency</option>
+                        <option value="NASA">NASA</option>
+                        <option value="ESA">ESA</option>
+                        <option value="JAXA">JAXA</option>
+                        <option value="CSA">CSA</option>
+                        <option value="Roscosmos">Roscosmos</option>
+                        <option value="CNSA">CNSA</option>
+                        <option value="ISRO">ISRO</option>
+                    </select>
+                    <div class="error-message" id="agencyError">Mission name is required</div>
+                </div>           
+                
+                <div class="form-group">
+                    <label class="form-label" for="missionDate">Launch Date</label>
+                    <input type="date" class="form-input" id="missionDate" required>
+                    <div class="error-message" id="dateError">Launch date is required</div>
+                </div>
+                
+               <div class="form-group">
+                    <label class="form-label" for="missionObjective">Objective</label>
+                    <textarea class="form-input" id="missionObjective" rows="3" required></textarea>
+                    <div class="error-message" id="objectiveError">Mission objective is required</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="missionImage">Image URL</label>
+                    <input type="url" class="form-input" id="missionImage" required>
+                    <div class="error-message" id="imageError">Image URL is required</div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <!-- Footer -->
     <footer class="main-footer">
